@@ -9,7 +9,7 @@ public class Employee
 
     public Employee (String name, String empId, String lob)
     {
-       
+
         this.name = name;
         this.empId = empId;
         this.lob = lob;
@@ -17,7 +17,7 @@ public class Employee
 
     public Employee ()
     {
-       
+
     }
 
     public String getName ()

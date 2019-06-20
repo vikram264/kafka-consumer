@@ -15,17 +15,16 @@ import org.springframework.kafka.support.serializer.JsonDeserializer;
 
 import com.example.kafka.consumer.bean.Employee;
 
-
-
 @EnableKafka
 @Configuration
+
 public class KafkaConsumerConfig
 {
 
     @Bean
     public ConsumerFactory<String, Employee> consumerFactory ()
     {
-        
+
         JsonDeserializer<Employee> deserializer = new JsonDeserializer<>(Employee.class);
         deserializer.setRemoveTypeHeaders(false);
         deserializer.addTrustedPackages("*");
@@ -37,7 +36,9 @@ public class KafkaConsumerConfig
             .put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         configProps
             .put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class);
-        configProps.put(ConsumerConfig.GROUP_ID_CONFIG, "test-group-id");
+        configProps.put(ConsumerConfig.GROUP_ID_CONFIG, "test-json-id");
+        // To make sure the message is consumed from the beginning.
+        configProps.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
         return new DefaultKafkaConsumerFactory<>(configProps, new StringDeserializer(), deserializer);
 
     }
@@ -48,7 +49,7 @@ public class KafkaConsumerConfig
         ConcurrentKafkaListenerContainerFactory<String, Employee> factory =
             new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(consumerFactory());
+
         return factory;
     }
-
 }
